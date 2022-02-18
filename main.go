@@ -45,18 +45,6 @@ func main() {
 		f.WriteString(string(pathJson) + ",")
 	})
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
-
-	c.OnError(func(_ *colly.Response, err error) {
-		fmt.Println("Something went wrong:", err)
-	})
-
-	c.OnResponse(func(r *colly.Response) {
-		fmt.Println("Visited", r.Request.URL)
-	})
-
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println("Finished", r.Request.URL)
 		stat, _ := f.Stat()
