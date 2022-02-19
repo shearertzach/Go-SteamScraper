@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/fatih/color"
 	"github.com/gocolly/colly"
 )
 
@@ -20,6 +21,7 @@ type SteamGame struct {
 func main() {
 	// Instantiate default collector
 	c := colly.NewCollector()
+	d := color.New(color.FgGreen)
 	f, _ := os.Create("data.json")
 
 	f.WriteString("[")
@@ -33,7 +35,7 @@ func main() {
 		image := e.ChildAttr("div.col.search_capsule > img", "src")
 		release_date := e.ChildText("div.responsive_search_name_combined > div.search_released")
 
-		path_currency := &SteamGame{
+		steam_game := &SteamGame{
 			Name:        name,
 			Link:        link,
 			Price:       price,
@@ -41,8 +43,9 @@ func main() {
 			ReleaseDate: release_date,
 		}
 
-		pathJson, _ := json.Marshal(path_currency)
+		pathJson, _ := json.Marshal(steam_game)
 		f.WriteString(string(pathJson) + ",")
+		d.Println("Added:", name)
 	})
 
 	c.OnScraped(func(r *colly.Response) {
